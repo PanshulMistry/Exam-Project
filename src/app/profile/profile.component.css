@@ -1,49 +1,84 @@
+/* Profile Page Styles */
+.profile-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
 .profile-card {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .profile-img {
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    margin-bottom: 20px;
-  }
-  
-  .profile-img-placeholder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background-color: #ddd;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-  }
-  
-  .profile-info {
-    text-align: left;
-  }
-  
-  .profile-info p {
-    font-size: 1rem;
-    margin-bottom: 10px;
-  }
-  
-  .profile-info .row {
-    margin-top: 20px;
-  }
-  
-  @media (max-width: 768px) {
-    .profile-card {
-      padding: 15px;
-    }
-  }
-  
+  border-radius: 15px;
+  overflow: hidden;
+  border: none;
+}
+
+.profile-image-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-initials-container {
+  width: 100%;
+  height: 100%;
+  background-color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-initials {
+  font-size: 3rem;
+  color: white;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.profile-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.section-title {
+  color: #495057;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.info-row {
+  margin-top: 20px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #212529;
+}

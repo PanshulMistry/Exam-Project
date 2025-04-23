@@ -11,10 +11,15 @@ import { AdminUserProxy, AuthService } from '../services/auth.service';
 export class ProfileComponent implements OnInit{
   user: AdminUserProxy | null = null;
   userInitials: string = '';
-
+  showNavbar: boolean = true;
   constructor(private route: ActivatedRoute, private authService: AuthService) {}
 
   ngOnInit(): void {
+    const emailFromRoute = this.route.snapshot.paramMap.get('email');
+    const adminEmail = localStorage.getItem('adminEmail');
+
+    // If the email from the route is adminEmail, hide the navbar
+    this.showNavbar = emailFromRoute === adminEmail;
     const email = this.route.snapshot.paramMap.get('email');
     if (email) {
       this.authService.getUserDetails(email).subscribe({

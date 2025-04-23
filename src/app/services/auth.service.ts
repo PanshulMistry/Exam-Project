@@ -24,11 +24,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string): Observable<{ token: string; role: string }> {
+  login(username: string, password: string): Observable<{ token: string; role: string,email:string }> {
     const url = `${this.baseUrl}/test/login`;
     const body = { username, password };
     // console.log('jwt:',this.jwt)
-    return this.http.post<{ token: string; role: string }>(url, body).pipe(
+    return this.http.post<{ token: string; role: string,email:string }>(url, body).pipe(
       catchError(this.handleError)
     );
   }
@@ -45,6 +45,29 @@ export class AuthService {
 
   getUserDetails(email: string): Observable<AdminUserProxy> {
     return this.http.get<AdminUserProxy>(`${this.baseUrl}/test/getUserDetails/${email}`);
+  }
+  
+  updateUserDetails(adminUserProxy: AdminUserProxy, file?: File): Observable<string> {
+    const formData = new FormData();
+    
+    // Convert adminUserProxy object to JSON blob and append to FormData
+    formData.append('adminUserProxy', new Blob([JSON.stringify(adminUserProxy)], {
+      type: 'application/json'
+    }));
+    
+    // Only append file if it exists
+    if (file) {
+      formData.append('file', file, file.name);
+    }
+
+    return this.http.post<string>(`${this.baseUrl}/update-user`, formData);
+  }
+
+  getUserByEmail(email: string): Observable<AdminUserProxy> {
+    return this.http.get<AdminUserProxy>(`${this.baseUrl}/test/update-user/${email}`)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   // Method to delete a user by email

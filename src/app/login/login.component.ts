@@ -32,6 +32,7 @@ export class LoginComponent {
           if (response && response.token) {
             localStorage.setItem('jwt', response.token);
             localStorage.setItem('role', response.role);
+            localStorage.setItem('adminEmail', response.email);
 
             if (response.role === 'ADMIN') {
               this.router.navigate(['/dashboard']);

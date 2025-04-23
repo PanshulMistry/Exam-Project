@@ -1,0 +1,227 @@
+<div class="edit-user-container">
+    <div class="container py-4">
+      <!-- Header with back button -->
+      <div class="d-flex align-items-center mb-4">
+        <button class="btn btn-outline-secondary me-3" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <h2 class="mb-0">Edit User</h2>
+      </div>
+  
+      <!-- Main form card -->
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading user data...</p>
+          </div>
+  
+          <div *ngIf="!loading && errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+  
+          <form *ngIf="!loading && !errorMessage" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <!-- Profile image section -->
+              <div class="col-md-4 mb-4 mb-md-0">
+                <div class="text-center">
+                  <div class="profile-image-container mb-3">
+                    <!-- Show profile image if exists -->
+                    <div *ngIf="imagePreview; else noImageTemplate" class="profile-image rounded-circle">
+                      <img [src]="imagePreview" alt="Profile Image Preview" class="img-fluid rounded-circle">
+                    </div>
+  
+                    <!-- Show initials if no image -->
+                    <ng-template #noImageTemplate>
+                      <div class="profile-initials-container rounded-circle">
+                        <div class="profile-initials">
+                          {{ getInitials(userForm.get('name')?.value || '') }}
+                        </div>
+                      </div>
+                    </ng-template>
+                  </div>
+  
+                  <!-- Image upload controls -->
+                  <div class="image-upload-controls">
+                    <label for="profileImage" class="btn btn-outline-primary mb-2">
+                      <i class="bi bi-upload me-2"></i>Choose Image
+                    </label>
+                    <input 
+                      type="file" 
+                      id="profileImage" 
+                      class="d-none" 
+                      accept="image/*"
+                      (change)="onImageSelected($event)">
+  
+                    <button 
+                      *ngIf="imagePreview" 
+                      type="button" 
+                      class="btn btn-outline-danger btn-sm ms-2" 
+                      (click)="removeImage()">
+                      <i class="bi bi-trash me-1"></i>Remove
+                    </button>
+                  </div>
+  
+                  <small class="text-muted d-block mt-2">
+                    Recommended: Square image, max 2MB
+                  </small>
+                </div>
+              </div>
+  
+              <!-- User details form -->
+              <div class="col-md-8">
+                <div class="row g-3">
+                  <!-- Name field -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="name" class="form-label">Full Name</label>
+                      <input 
+                        type="text" 
+                        id="name" 
+                        formControlName="name" 
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submitted && f['name'].errors}">
+                      <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                        <div *ngIf="f['name'].errors['required']">Name is required</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Username field -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="username" class="form-label">Username</label>
+                      <input 
+                        type="text" 
+                        id="username" 
+                        formControlName="username" 
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submitted && f['username'].errors}">
+                      <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+                        <div *ngIf="f['username'].errors['required']">Username is required</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Email field -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="email" class="form-label">Email</label>
+                      <input 
+                        type="email" 
+                        id="email" 
+                        formControlName="email" 
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submitted && f['email'].errors}">
+                      <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                        <div *ngIf="f['email'].errors['required']">Email is required</div>
+                        <div *ngIf="f['email'].errors['email']">Email must be valid</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Contact number field -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="contactNumber" class="form-label">Contact Number</label>
+                      <input 
+                        type="text" 
+                        id="contactNumber" 
+                        formControlName="contactNumber" 
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submitted && f['contactNumber'].errors}">
+                      <div *ngIf="submitted && f['contactNumber'].errors" class="invalid-feedback">
+                        <div *ngIf="f['contactNumber'].errors['required']">Contact number is required</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Gender field -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="gender" class="form-label">Gender</label>
+                      <select 
+                        id="gender" 
+                        formControlName="gender" 
+                        class="form-select"
+                        [ngClass]="{'is-invalid': submitted && f['gender'].errors}">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                      <div *ngIf="submitted && f['gender'].errors" class="invalid-feedback">
+                        <div *ngIf="f['gender'].errors['required']">Gender is required</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Date of birth field -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="dob" class="form-label">Date of Birth</label>
+                      <input 
+                        type="date" 
+                        id="dob" 
+                        formControlName="dob" 
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submitted && f['dob'].errors}">
+                      <div *ngIf="submitted && f['dob'].errors" class="invalid-feedback">
+                        <div *ngIf="f['dob'].errors['required']">Date of birth is required</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Pincode field -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="pinCode" class="form-label">PIN Code</label>
+                      <input 
+                        type="text" 
+                        id="pinCode" 
+                        formControlName="pinCode" 
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submitted && f['pinCode'].errors}">
+                      <div *ngIf="submitted && f['pinCode'].errors" class="invalid-feedback">
+                        <div *ngIf="f['pinCode'].errors['required']">PIN code is required</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Address field -->
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="address" class="form-label">Address</label>
+                      <textarea 
+                        id="address" 
+                        formControlName="address" 
+                        class="form-control" 
+                        rows="3"
+                        [ngClass]="{'is-invalid': submitted && f['address'].errors}"></textarea>
+                      <div *ngIf="submitted && f['address'].errors" class="invalid-feedback">
+                        <div *ngIf="f['address'].errors['required']">Address is required</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!-- Form actions -->
+                  <div class="col-12 mt-4">
+                    <div class="d-flex justify-content-end">
+                      <button type="button" class="btn btn-outline-secondary me-2" (click)="goBack()">Cancel</button>
+                      <button type="submit" class="btn btn-primary" [disabled]="submitting">
+                        <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Save Changes
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

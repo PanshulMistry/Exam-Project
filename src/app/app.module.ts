@@ -8,13 +8,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { DashbaordComponent } from './dashbaord/dashbaord.component';
 import { ProfileComponent } from './profile/profile.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashbaordComponent,
-    ProfileComponent
+    ProfileComponent,
+    EditUserComponent
   ],
   imports: [
     BrowserModule,
