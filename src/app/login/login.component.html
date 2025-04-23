@@ -1,0 +1,44 @@
+<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center custom-bg"
+    style="flex-direction: column;">
+    <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px;">
+        <form #loginForm="ngForm" (ngSubmit)="saveLogin(loginForm)">
+            <div class="mb-3">
+                <label for="email" class="form-label custom-labels">Email</label>
+                <input type="text" class="form-control" id="email" name="email" #email="ngModel"
+                    [(ngModel)]="email.value" placeholder="Enter Email" required />
+                <!-- Email Error Messages -->
+                <!-- <span *ngIf="(email.touched || loginForm.submitted) && email.errors?.['required']" class="text-danger"
+                    style="font-size: 13px;">Email is required</span>
+                <span *ngIf="(email.touched || loginForm.submitted) && email.errors?.['email']" class="text-danger"
+                    style="font-size: 13px;">Enter a valid email address</span> -->
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label custom-labels">Password</label>
+                <div class="input-group">
+                    <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password"
+                        name="password" #password="ngModel" [(ngModel)]="password.value" placeholder="Enter password"
+                        required minlength="5" />
+                    <span class="input-group-text bg-white">
+                        <img [src]="showPassword ? 'images/hide.png' : 'images/show.png'"
+                            alt="Toggle Password Visibility" (click)="togglePasswordVisibility()"
+                            style="cursor: pointer; width: 20px; height: 20px;" />
+                    </span>
+                </div>
+                <!-- Password Error Messages -->
+                <span *ngIf="(password.touched || loginForm.submitted) && password.errors?.['required']"
+                    class="text-danger" style="font-size: 13px;">Password is required</span>
+                <span *ngIf="(password.touched || loginForm.submitted) && password.errors?.['minlength']"
+                    class="text-danger" style="font-size: 13px;">Password must be at least 5 characters</span>
+            </div>
+
+            <div class="mb-3 d-flex justify-content-between">
+                <a routerLink="/forgotPassword" class="text-decoration-underline custom-labels"
+                    style="font-size: 14px;">
+                    Forgot Password?
+            </a>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 bg-black">Sign in</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Dashboard</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/dashboard">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Reports</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Settings</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="table-container" [class.no-scroll]="filteredTeams.length < 5">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 5%;">S No</th>
+          <th style="width: 10%;">Name</th>
+          <th style="width: 35%;">Email</th>
+          <th style="width: 12%;">Gender</th>
+          <th style="width: 10%;">Edit</th>
+          <th style="width: 10%;">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let team of filteredTeams; index as i">
+          <td>{{ (currentPage * pageSize) + (i + 1) }}</td>
+          <td>{{ team.name }}</td>
+          <td>{{ team.email }}</td>
+          <td>{{ team.gender }}</td>
+          <td>
+            <button class="details-btn" (click)="viewEmployees(team.email)">View Employees</button>
+          </td>
+          <td>
+            <button class="delete-btn" (click)="deleteTeam(team.email,(i+1))">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredTeams.length === 0">
+          <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle; color: red; font-size: 18px; font-weight: bold;">
+            No User found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Pagination -->
+    <div *ngIf="totalItems > pageSize">
+      <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 0">Previous</button>
+      <span>{{ currentPage + 1 }} / {{ Math.ceil(totalItems / pageSize) }}</span>
+      <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === Math.ceil(totalItems / pageSize) - 1">Next</button>
+    </div>
+  </div>
+  
