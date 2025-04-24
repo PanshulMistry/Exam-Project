@@ -9,49 +9,68 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './dashbaord.component.css'
 })
 export class DashbaordComponent implements OnInit{
-  filteredUsers: AdminUserProxy[] = [];  // Fetched user list
-  totalItems: number = 0;                // Total number of users (for pagination)
-  currentPage: number = 0;               // Current page index
-  pageSize: number = 10;                 // Number of users per page
-  sortBy: string = 'id';                 // Default sorting field
-  sortDir: string = 'asc';               // Default sorting direction
-  adminEmail: string | null = ''
-  Math = Math; // To use Math functions in the template if needed
+  allUsers: AdminUserProxy[] = [];       // Full list of users
+  filteredUsers: AdminUserProxy[] = [];  // Users after search filter
+  totalItems: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 10;
+  sortBy: string = 'id';
+  sortDir: string = 'asc';
+  adminEmail: string | null = '';
+  searchText: string = '';
+  Math = Math;
 
-  constructor(private adminUserService: AuthService,private router: Router) {}
+  constructor(private adminUserService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.adminEmail = localStorage.getItem("adminEmail")
+    this.adminEmail = localStorage.getItem("adminEmail");
     this.fetchAllUsers();
   }
 
-  // Fetch all users with pagination and sorting
+  // Method to fetch all users or perform a search if searchText is provided
   fetchAllUsers(): void {
-    this.adminUserService.getAllUsers(this.currentPage, this.pageSize, this.sortBy, this.sortDir).subscribe({
-      next: (data) => {
-        this.filteredUsers = data.content || [];
-        this.totalItems = data.totalElements || 0;
-      },
-      error: (err) => {
-        console.error('Error fetching users:', err);
-      }
-    });
+    if (this.searchText.trim() === '') {
+      // If there's no search text, fetch all users
+      this.adminUserService.getAllUsers(this.currentPage, this.pageSize, this.sortBy, this.sortDir).subscribe({
+        next: (data) => {
+          this.allUsers = data.content || [];
+          this.totalItems = data.totalElements || 0;
+          this.filteredUsers = this.allUsers; // No search filter
+        },
+        error: (err) => {
+          console.error('Error fetching users:', err);
+        }
+      });
+    } else {
+      // If there's search text, call search API
+      this.adminUserService.searchUsers(this.searchText, this.currentPage, this.pageSize).subscribe({
+        next: (data) => {
+          this.filteredUsers = data.content || [];
+          this.totalItems = data.totalElements || 0;
+        },
+        error: (err) => {
+          console.error('Error searching users:', err);
+        }
+      });
+    }
   }
 
-  // Triggered when pagination changes
+  // Search filter function
+  applySearchFilter(): void {
+    this.fetchAllUsers(); // Call fetchAllUsers to apply search filter
+  }
+
   onPageChange(page: number): void {
     this.currentPage = page;
-    this.fetchAllUsers();
+    this.fetchAllUsers(); // Fetch users when page changes
   }
 
-  // Handle sort change
   onSortChange(sortBy: string, sortDir: string): void {
     this.sortBy = sortBy;
     this.sortDir = sortDir;
-    this.fetchAllUsers();
+    this.fetchAllUsers(); // Fetch users when sorting changes
   }
 
-  // Placeholder for viewing employee details
   viewUserDetails(email: string): void {
     this.router.navigate(['/profile', email]);
   }
@@ -63,15 +82,19 @@ export class DashbaordComponent implements OnInit{
   viewAdminDetails() {
     this.router.navigate(['/profile', this.adminEmail]);
   }
-  
-  // Delete user by email
+
+  logout() {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('role');
+    localStorage.removeItem('adminEmail');
+    this.router.navigate(['/login']);
+  }
+
   deleteUser(email: string, index: number): void {
     if (confirm('Are you sure you want to delete this user?')) {
       this.adminUserService.deleteUser(email).subscribe({
         next: () => {
-          console.log('User deleted successfully');
-          this.filteredUsers.splice(index, 1);  // Remove user from current list
-          this.totalItems--;
+          this.fetchAllUsers();
         },
         error: (err) => {
           console.error('Error deleting user:', err);
@@ -80,37 +103,30 @@ export class DashbaordComponent implements OnInit{
     }
   }
 
-  // Returns an array of page numbers to display in pagination
   getPaginationRange(): number[] {
     const totalPages = Math.ceil(this.totalItems / this.pageSize);
     const maxPagesToShow = 5;
     let startPage: number, endPage: number;
-    
+
     if (totalPages <= maxPagesToShow) {
-      // If total pages are less than max to display, show all pages
       startPage = 1;
       endPage = totalPages;
     } else {
-      // Calculate start and end pages to show
       const maxPagesBeforeCurrentPage = Math.floor(maxPagesToShow / 2);
       const maxPagesAfterCurrentPage = Math.ceil(maxPagesToShow / 2) - 1;
-      
+
       if (this.currentPage <= maxPagesBeforeCurrentPage) {
-        // Close to start
         startPage = 1;
         endPage = maxPagesToShow;
       } else if (this.currentPage + maxPagesAfterCurrentPage >= totalPages) {
-        // Close to end
         startPage = totalPages - maxPagesToShow + 1;
         endPage = totalPages;
       } else {
-        // In the middle
         startPage = this.currentPage - maxPagesBeforeCurrentPage + 1;
         endPage = this.currentPage + maxPagesAfterCurrentPage + 1;
       }
     }
-    
-    // Create an array of page numbers
-    return Array.from(Array((endPage + 1) - startPage).keys()).map(i => startPage + i);
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   }
 }

@@ -9,6 +9,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { DashbaordComponent } from './dashbaord/dashbaord.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     LoginComponent,
     DashbaordComponent,
     ProfileComponent,
-    EditUserComponent
+    EditUserComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

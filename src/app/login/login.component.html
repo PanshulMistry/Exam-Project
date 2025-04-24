@@ -9,7 +9,7 @@
                 <!-- Email Error Messages -->
                 <span *ngIf="(email.touched || loginForm.submitted) && email.errors?.['required']" class="text-danger"
                     style="font-size: 13px;">Username is required</span>
-                
+
             </div>
 
             <div class="mb-3">
@@ -35,7 +35,11 @@
                 <a routerLink="/forgotPassword" class="text-decoration-underline custom-labels"
                     style="font-size: 14px;">
                     Forgot Password?
-            </a>
+                </a>
+            </div>
+            <div id="hcaptcha-container">
+                <div class="h-captcha" data-sitekey="220ee742-09dc-487c-8cd0-695677f6b966"
+                data-callback="onCaptchaVerified"></div>
             </div>
             <button type="submit" class="btn btn-primary w-100 bg-black">Sign in</button>
         </form>

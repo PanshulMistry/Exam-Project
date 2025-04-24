@@ -60,8 +60,34 @@ export class AuthService {
       formData.append('file', file, file.name);
     }
 
-    return this.http.post<string>(`${this.baseUrl}/update-user`, formData);
+    return this.http.post<string>(`${this.baseUrl}/test/update-user`, formData);
   }
+
+  getToken(email: string): Observable<string> {
+    return this.http.get(`${this.baseUrl}/test/resetPasswordMail/${email}`, {
+      responseType: 'text'
+    });
+  }
+
+  requestResetPassword(token: string, newPassword: string): Observable<boolean> {
+    const body = {
+      token: token,
+      newPassword: newPassword
+    };
+    return this.http.post<boolean>(`${this.baseUrl}/test/reset-password`, body);
+  }
+
+  searchUsers(keyword: string, page: number, size: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/test/search`, {
+      params: {
+        keyword,
+        page: page.toString(),
+        size: size.toString()
+      }
+    });
+  }
+  
+  
 
   getUserByEmail(email: string): Observable<AdminUserProxy> {
     return this.http.get<AdminUserProxy>(`${this.baseUrl}/test/update-user/${email}`)

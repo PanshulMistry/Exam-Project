@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AdminUserProxy, AuthService } from '../services/auth.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class ProfileComponent implements OnInit{
   user: AdminUserProxy | null = null;
   userInitials: string = '';
   showNavbar: boolean = true;
-  constructor(private route: ActivatedRoute, private authService: AuthService) {}
+  constructor(private route: ActivatedRoute, private authService: AuthService,private router:Router) {}
 
   ngOnInit(): void {
     const emailFromRoute = this.route.snapshot.paramMap.get('email');
@@ -35,6 +35,14 @@ export class ProfileComponent implements OnInit{
         }
       });
     }
+  }
+
+  logout() {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('role');
+    localStorage.removeItem('adminEmail');
+  
+    this.router.navigate(['/login']); // Navigate to the login page
   }
 
   // Function to extract the initials from the user's full name

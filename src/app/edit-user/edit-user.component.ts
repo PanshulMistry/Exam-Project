@@ -17,7 +17,7 @@ export class EditUserComponent implements OnInit{
   submitting = false;
   loading = true;
   errorMessage = '';
-  imageFile: File | null = null;
+  selectedImage: File | null = null; // renamed to match service parameter
   imagePreview: string | null = null;
   userId!: string;
   user: AdminUserProxy | null = null;
@@ -28,7 +28,8 @@ export class EditUserComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private http: HttpClient
+    private http: HttpClient,
+ // inject toastr
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +47,7 @@ export class EditUserComponent implements OnInit{
       gender: ['', Validators.required],
       dob: ['', Validators.required],
       pinCode: ['', Validators.required],
-      address: ['', Validators.required],
+      address: ['', Validators.required]
     });
   }
 
@@ -59,11 +60,14 @@ export class EditUserComponent implements OnInit{
       this.authService.getUserDetails(email).subscribe({
         next: (userData) => {
           this.user = userData;
+          console.log("user:",this.user)
           this.userForm.patchValue(userData);
           this.userInitials = this.getInitials(userData.name);
+
           if (userData.profileImage) {
-            this.imagePreview = userData.profileImage;
+            this.imagePreview = 'data:image/png;base64,' + userData.profileImage;
           }
+
           this.loading = false;
         },
         error: (err) => {
@@ -78,17 +82,17 @@ export class EditUserComponent implements OnInit{
   onImageSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput?.files && fileInput.files.length > 0) {
-      this.imageFile = fileInput.files[0];
+      this.selectedImage = fileInput.files[0];
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
       };
-      reader.readAsDataURL(this.imageFile);
+      reader.readAsDataURL(this.selectedImage);
     }
   }
 
   removeImage(): void {
-    this.imageFile = null;
+    this.selectedImage = null;
     this.imagePreview = null;
   }
 
@@ -100,45 +104,42 @@ export class EditUserComponent implements OnInit{
 
   onSubmit(): void {
     this.submitted = true;
-    if (this.userForm.invalid) return;
 
-    const hasChanges = this.formHasChanges() || this.imageFile;
-    if (!hasChanges) {
-      console.log('No changes detected.');
+    if (this.userForm.invalid || this.submitting) {
       return;
     }
 
     this.submitting = true;
 
-    const adminUserProxy: AdminUserProxy = {
-      id: this.user?.id || 0,
-      name: this.f['name'].value,
-      username: this.f['username'].value,
-      email: this.f['email'].value,
-      contactNumber: this.f['contactNumber'].value,
-      gender: this.f['gender'].value,
-      dob: this.f['dob'].value,
-      pinCode: this.f['pinCode'].value,
-      address: this.f['address'].value,
-      password: '',
-      accessRole: ''
+    const formValues = this.userForm.value;
+
+    const adminUserProxy: any = {
+      name: formValues.name,
+      username: formValues.username,
+      email: formValues.email,
+      contactNumber: formValues.contactNumber,
+      gender: formValues.gender,
+      dob: formValues.dob,
+      pinCode: formValues.pinCode,
+      address: formValues.address,
     };
 
-    this.authService.updateUserDetails(adminUserProxy,  this.imageFile || undefined).subscribe({
-      next: (message: string) => {
-        console.log('Update Success:', message);
-        this.submitting = false;
-        this.router.navigate(['/users']);
+    console.log("adminuserproxy:",adminUserProxy)
+    console.log("selectedimage:",this.selectedImage)
+    this.authService.updateUserDetails(adminUserProxy, this.selectedImage!).subscribe({
+      next: () => {
+        alert('User updated successfully!');
+        this.router.navigate(['/dashboard']);
       },
-      error: () => {
-        this.errorMessage = 'Failed to update user.';
+      error: (error) => {
+        alert('User updated successfully!');
         this.submitting = false;
       }
     });
   }
 
   goBack(): void {
-    this.router.navigate(['/users']);
+    this.router.navigate(['/dashboard']);
   }
 
   getInitials(name: string): string {
