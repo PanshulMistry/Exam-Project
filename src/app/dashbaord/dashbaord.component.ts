@@ -27,6 +27,11 @@ export class DashbaordComponent implements OnInit{
     this.fetchAllUsers();
   }
 
+  exportToExcel() {
+    window.open('http://localhost:8080/test/users/export/excel', '_blank');
+  }
+  
+
   // Method to fetch all users or perform a search if searchText is provided
   fetchAllUsers(): void {
     if (this.searchText.trim() === '') {

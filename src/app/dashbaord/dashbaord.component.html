@@ -1,33 +1,50 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="custom-navbar navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/dashboard">Dashboard</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link active" routerLink="/dashboard">Home</a>
+          <a class="nav-link" routerLink="/dashboard">
+            Home
+            <div class="underline"></div>
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="viewAdminDetails()">Profile</a>
+          <a class="nav-link" (click)="viewAdminDetails()">
+            Profile
+            <div class="underline"></div>
+          </a>
         </li>
         <li class="nav-item px-3">
-          <a class="btn btn-outline-light rounded-pill px-3 py-1  align-items-center" href="#" (click)="logout()">
-            <i class="bi bi-box-arrow-right me-2"></i> Logout
+          <a class="logout-btn" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i> Logout
           </a>
-        </li>        
-      </ul>
+        </li>
+      </ul>      
     </div>
   </div>
 </nav>
 
-<div class="container mt-4">
+
+<div class="container mt-4" >
   <div class="card shadow">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
       <h5 class="mb-0">User Management</h5>
-      <input type="text" class="form-control w-25" placeholder="Search by name or email" [(ngModel)]="searchText" (input)="applySearchFilter()" />
+
+      <div class="d-flex gap-2">
+        <input type="text" class="form-control" style="width: 250px;" placeholder="Search by name or email"
+          [(ngModel)]="searchText" (input)="applySearchFilter()" />
+
+        <button class="btn btn-outline-light" (click)="exportToExcel()" title="Download users as Excel">
+          <i class="bi bi-file-earmark-excel me-1"></i> Export to Excel
+        </button>
+      </div>
     </div>
+
 
     <div class="card-body">
       <div class="table-responsive">
@@ -50,7 +67,7 @@
               <td>{{ user.gender }}</td>
               <td>
                 <button class="btn btn-sm btn-outline-primary" (click)="viewUserDetails(user.email)">
-                  <i class="bi bi-people-fill me-1"></i> View Employees
+                  <i class="bi bi-people-fill me-1"></i> View Details
                 </button>
               </td>
               <td>
@@ -75,7 +92,8 @@
 
       <div class="d-flex justify-content-between align-items-center mt-3" *ngIf="totalItems > pageSize">
         <div class="pagination-info">
-          Showing {{ currentPage * pageSize + 1 }} to {{ Math.min((currentPage + 1) * pageSize, totalItems) }} of {{ totalItems }} entries
+          Showing {{ currentPage * pageSize + 1 }} to {{ Math.min((currentPage + 1) * pageSize, totalItems) }} of {{
+          totalItems }} entries
         </div>
         <nav>
           <ul class="pagination">
