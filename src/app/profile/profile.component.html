@@ -23,33 +23,28 @@
     </div>
   </div>
 </nav>-->
-<nav *ngIf="showNavbar" class="custom-navbar navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav *ngIf="showNavbar" class="custom-navbar navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/dashboard">Dashboard</a>
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard">
-            Home
-            <div class="underline"></div>
-          </a>
+          <a class="nav-link" routerLink="/dashboard">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/profile">
-            Profile
-            <div class="underline"></div>
-          </a>
+          <a class="nav-link" routerLink="/profile">Profile</a>
         </li>
-        <li class="nav-item px-3">
-          <a class="logout-btn" (click)="logout()">
+        <li class="nav-item">
+          <a class="logout-btn d-flex align-items-center gap-1 mx-1" href="#" (click)="logout()">
             <i class="bi bi-box-arrow-right"></i> Logout
           </a>
         </li>
-      </ul>      
+      </ul>
     </div>
   </div>
 </nav>

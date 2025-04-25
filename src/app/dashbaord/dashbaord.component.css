@@ -1,61 +1,71 @@
-.custom-navbar {
-    /* position: fixed; */
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1030;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-  }
-  
-  .custom-navbar .nav-link {
-    position: relative;
-    font-size: 18px;
-    padding-bottom: 5px;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .custom-navbar .nav-link .underline {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0%;
-    height: 3px;
-    background-color: yellow;
-    transition: width 0.3s ease-in-out;
-  }
-  
-  
-  .custom-navbar .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0%;
-    height: 3px;
-    background-color: yellow;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .custom-navbar .nav-link:hover::after {
-    width: 100%;
-  }
-  .custom-navbar .logout-btn {
-    background-color: transparent;
-    border: 2px solid #ffffff;
-    color: #ffffff;
-    padding: 6px 16px;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .custom-navbar .logout-btn:hover {
-    background-color: #ffffff;
-    color: #212529;
-    text-decoration: none;
-  }
+/* Make links look interactive */
+.custom-navbar .nav-link {
+  position: relative;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.custom-navbar .nav-link:hover {
+  color: #ffc107;
+}
+
+/* Underline animation on hover */
+.custom-navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: 4px;
+  background-color: #ffc107;
+  transition: width 0.3s ease;
+}
+
+.custom-navbar .nav-link:hover::after {
+  width: 100%;
+}
+
+.logout-btn {
+  background-color: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-btn:hover {
+  background-color: #ffffff;
+  color: #212529;
+  text-decoration: none;
+}
+/* Ensure table responsiveness */
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* Align actions vertically */
+.table td, .table th {
+  vertical-align: middle;
+}
+
+/* Make action buttons wrap neatly on smaller screens */
+.table .btn {
+  white-space: nowrap;
+}
+
+/* Responsive buttons in actions column */
+.actions-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+
   
